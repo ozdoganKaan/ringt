@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd">
+		
+		
+		<context:component-scan base-package="com.swe.repository" />
+	<context:component-scan base-package="com.swe.ringt" />
+	<context:component-scan base-package="com.swe.service" />
+	<context:component-scan base-package="com.swe.entity" />
+	<context:annotation-config/>
+	
+	
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+	
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<annotation-driven />
+
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
+	<resources mapping="/resources/**" location="/resources/" />
+
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
+	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<beans:property name="suffix" value=".jsp" />
+	</beans:bean>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		<resources mapping="/**" location="/resources/" />
+
+	<context:property-placeholder location="classpath:application.properties" />
+	
+	
+	<beans:bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<beans:property name="driverClass" value="${spring.datasource.driver-class-name}" />
+		<beans:property name="jdbcUrl" value="${spring.datasource.url}" />
+		<beans:property name="user" value="${spring.datasource.username}" />
+		<beans:property name="password" value="${spring.datasource.password}" />
+	</beans:bean>
+	 
+	<beans:bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<beans:property name="dataSource" ref="dataSource"/>
+		<beans:property name="hibernateProperties">
+			<beans:props>
+				<beans:prop key="spring.jpa.properties.hibernate.dialect">${spring.jpa.properties.hibernate.dialect}</beans:prop>
+				<beans:prop key="spring.jpa.hibernate.ddl-auto">${spring.jpa.hibernate.ddl-auto}</beans:prop>
+				<beans:prop key="spring.jpa.show-sql">${spring.jpa.show-sql}</beans:prop>
+				<beans:prop key="spring.jpa.hibernate.naming.implicit-strategy">${spring.jpa.hibernate.naming.implicit-strategy}</beans:prop>
+				<beans:prop key="spring.jpa.hibernate.naming.physical-strategy">${spring.jpa.hibernate.naming.physical-strategy}</beans:prop>
+			</beans:props>
+		</beans:property>
+		<beans:property name="packagesToScan" value="com.swe.entity" />
+	</beans:bean>
+	
+	
+	
+	<beans:bean id="hibernateTransactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<beans:property name="sessionFactory" ref="sessionFactory"/>	
+	</beans:bean>
+	
+	<tx:annotation-driven transaction-manager="hibernateTransactionManager" />
+	
+	
+</beans:beans>
